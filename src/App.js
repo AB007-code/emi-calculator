@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect, useState } from "react";
+import Navbar from "./components/Navbar";
+import Routing from "./routes/Routing";
+import { ThemeProvider } from "@mui/material/styles";
 
-function App() {
+import { dataProvider } from "./components/context/DataProvider";
+import { Paper } from "@mui/material";
+
+const App = () => {
+  const { mode, theme } = useContext(dataProvider);
+  let [state, setState] = useState(theme);
+  useEffect(() => {
+    setInterval(() => {
+      setState(theme);
+      console.log(state);
+    }, 1000);
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ThemeProvider theme={state}>
+        <Paper>
+          <Navbar />
+          <Routing />
+        </Paper>
+      </ThemeProvider>
     </div>
   );
-}
+};
 
 export default App;
