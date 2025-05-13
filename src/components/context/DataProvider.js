@@ -1,28 +1,36 @@
-import { createTheme } from "@mui/material";
-import React from "react";
-import { createContext } from "react";
-export const dataProvider = createContext();
-let obj = {
-  mode: "light",
-  theme: createTheme({
-    palette: {
-      mode: "light",
-    },
-  }),
-  toggleHandler() {
-    if (this.mode == "light") {
-      this.mode = "dark";
-    } else {
-      this.mode = "light";
-    }
-    this.theme.palette.mode = this.mode;
-    // console.log(this.theme);
-    return this.theme;
-  },
-};
-console.log(obj);
+import { ThemeProvider } from "@emotion/react";
+import { createTheme, Paper } from "@mui/material";
+import { createContext, useMemo, useState } from "react";
+export let dataProvider = createContext({
+  toggleHandler: () => {},
+});
+
 const DataProvider = ({ children }) => {
-  return <dataProvider.Provider value={obj}>{children}</dataProvider.Provider>;
+  const [mode, setMode] = useState("light");
+  const toggleHandler = useMemo(
+    () => () => {
+      // Function that calls setMode
+      setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+    },
+    [] // No dependencies needed for the function itself
+  );
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode] // Recreate theme when mode changes
+  );
+  const contextValue = useMemo(() => ({ toggleHandler }), [toggleHandler]);
+  return (
+    <dataProvider.Provider value={contextValue}>
+      <ThemeProvider theme={theme}>
+        <Paper>{children}</Paper>
+      </ThemeProvider>
+    </dataProvider.Provider>
+  );
 };
 
 export default DataProvider;
