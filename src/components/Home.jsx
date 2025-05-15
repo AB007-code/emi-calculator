@@ -74,6 +74,7 @@ const Home = () => {
                 variant="outlined"
                 value={val.interest}
                 name="interest"
+
                 // helperText="Incorrect entry."
               />
             </Grid>
