@@ -109,7 +109,7 @@ function Navbar(props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="home">
+      <Box>
         <Toolbar />
       </Box>
     </Box>

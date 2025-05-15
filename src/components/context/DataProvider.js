@@ -7,9 +7,11 @@ export let dataProvider = createContext({
 
 const DataProvider = ({ children }) => {
   const [mode, setMode] = useState("light");
+  // const [update, setUpdate] = useState({});
+  // const [obj, setObj] = useState({});
+
   const toggleHandler = useMemo(
     () => () => {
-      // Function that calls setMode
       setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
     },
     [] // No dependencies needed for the function itself
