@@ -7,31 +7,28 @@ import Button from "@mui/material/Button";
 import "../index.css";
 import { Box, Stack, Typography } from "@mui/material";
 import Detail from "./Detail";
+
 export const valProvider = createContext();
 
 const Home = () => {
   let [obj, setObj] = useState({});
-
+  let [good, setGood] = useState(false);
   const [val, setVal] = useState({
     loanAmount: "1000",
     interest: "8.5",
     term: "5",
   });
-  const loanText = useRef();
-  // console.log(val);
+
   const changeHandler = (e) => {
     switch (e.target.name) {
       case "loanAmount":
-        // console.log(val);
         setVal({ ...val, loanAmount: e.target.value });
         break;
       case "interest":
         setVal({ ...val, interest: e.target.value });
-        // console.log(val);
         break;
       case "term":
         setVal({ ...val, term: e.target.value });
-        // console.log(val);
         break;
       default:
         setVal({ ...val });
@@ -39,6 +36,7 @@ const Home = () => {
   };
 
   const submitHandler = () => {
+    setGood(true);
     setObj({ ...val });
   };
   return (
@@ -63,7 +61,6 @@ const Home = () => {
                 variant="outlined"
                 value={val.loanAmount}
                 name="loanAmount"
-                ref={loanText}
               />
             </Grid>
             <Grid>
@@ -96,9 +93,13 @@ const Home = () => {
           </Button>
         </Stack>
       </Container>
-      <valProvider.Provider value={obj}>
-        <Detail />
-      </valProvider.Provider>
+      {good ? (
+        <valProvider.Provider value={obj}>
+          <Detail />
+        </valProvider.Provider>
+      ) : (
+        ""
+      )}
     </>
   );
 };
