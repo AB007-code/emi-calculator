@@ -1,5 +1,5 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { valProvider } from "./Home";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -7,8 +7,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Fetch } from "../utilities/Fetch";
+import ReactVirtualizedTable from "./Reactvirtualizedtable";
+export const dataProvider = createContext();
 const Detail = () => {
-  const { loanAmount, interest, term } = useContext(valProvider);
+  const { resetHandler, obj1 } = useContext(valProvider);
+  const { loanAmount, interest, term } = obj1;
   let amount = loanAmount;
   let i = interest / 12 / 100;
   let t = term * 12;
@@ -23,18 +26,13 @@ const Detail = () => {
       setState({ ...conversion_rates });
     });
   }, []);
-
-  // let amount = loanAmount;
-  // let i = interest / 12 / 100;
-  // let t = term * 12;
-  // let emi = (amount * i * (1 + i) ** t) / ((1 + i) ** t - 1);
-  // emi = emi.toFixed(2);
   const changeData = (e) => {
     let a = e.target.textContent;
     setEmi((emi * state[a]).toFixed(2));
     setCoin(a);
     setT(true);
   };
+  const detailData = obj1;
   return (
     <>
       <Container>
@@ -77,7 +75,8 @@ const Detail = () => {
             }}
           >
             <Typography>
-              Converted EMI: {ta ? emi1 : emi} {coin}
+              Converted EMI:
+              {ta ? emi1 : emi} {coin}
             </Typography>
           </Grid>
           <Grid size={2}>
@@ -85,11 +84,15 @@ const Detail = () => {
               variant="outlined"
               size="medium"
               sx={{ height: "80%", marginTop: "5%" }}
+              onClick={resetHandler}
             >
               Reset Table
             </Button>
           </Grid>
         </Grid>
+        <dataProvider.Provider value={detailData}>
+          <ReactVirtualizedTable />
+        </dataProvider.Provider>
       </Container>
     </>
   );

@@ -1,5 +1,4 @@
-import { createContext, useRef, useState } from "react";
-
+import { createContext, useMemo, useState } from "react";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -8,7 +7,10 @@ import "../index.css";
 import { Box, Stack, Typography } from "@mui/material";
 import Detail from "./Detail";
 
-export const valProvider = createContext();
+export const valProvider = createContext({
+  resetHandler: () => {},
+  obj1: {},
+});
 
 const Home = () => {
   let [obj, setObj] = useState({});
@@ -39,6 +41,10 @@ const Home = () => {
     setGood(true);
     setObj({ ...val });
   };
+  const resetHandler = () => {
+    setGood(false);
+  };
+  const homeData = useMemo(() => ({ resetHandler, obj1: obj }), [resetHandler]);
   return (
     <>
       <Container sx={{ height: "200px" }}>
@@ -94,7 +100,7 @@ const Home = () => {
         </Stack>
       </Container>
       {good ? (
-        <valProvider.Provider value={obj}>
+        <valProvider.Provider value={homeData}>
           <Detail />
         </valProvider.Provider>
       ) : (
